@@ -8,8 +8,8 @@ app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing for React
 
 # --- CONFIGURATION ---
-DYNAMO_TABLE = os.environ.get('DYNAMO_TABLE', 'Innovatech_Employees')
-AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
+DYNAMO_TABLE = os.environ.get('DYNAMO_TABLE', '')
+AWS_REGION = os.environ.get('AWS_REGION', '')
 
 # --- AWS CLIENTS ---
 # We use try/except to allow the code to run in 'Mock Mode' if you don't have keys set up yet
@@ -19,11 +19,9 @@ try:
     iam_client = boto3.client('iam', region_name=AWS_REGION)
     s3_client = boto3.client('s3', region_name=AWS_REGION)
     IS_MOCK = False
-except (NoCredentialsError, ClientError):
-    print("WARNING: No AWS Credentials found. Running in MOCK mode.")
+except Exception as e:
+    print("WARNING: No AWS Credentials found. Running in MOCK mode.", e)
     IS_MOCK = True
-
-IS_MOCK = True
 # --- WORKFLOW HELPERS ---
 
 def workflow_create_iam_user(username):
