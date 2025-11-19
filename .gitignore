@@ -27,3 +27,11 @@ dist-ssr
 *.sw?
 
 .env
+
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+*.tfvars.json
+crash.log
