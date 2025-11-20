@@ -13,3 +13,12 @@ resource "aws_dynamodb_table" "employees" {
     Name = "employees-dynamodb-table"
   }
 }
+
+# Create ECR repository for backend application
+resource "aws_ecr_repository" "app" {
+  name = "innovatech-repo"
+
+  tags = {
+    Name = "innovatech-backend-repo"
+  }
+}
