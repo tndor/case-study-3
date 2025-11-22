@@ -19,6 +19,13 @@ resource "aws_security_group" "ad" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 389
+    to_port     = 389
+    protocol    = "tcp"
+    security_groups = [aws_eks_cluster.eks.vpc_config[0].cluster_security_group_id]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -40,8 +47,4 @@ resource "aws_instance" "domain_controller" {
   tags = {
     Name = "Innovatech-DC"
   }
-}
-
-output "dc_public_ip" {
-  value = aws_instance.domain_controller.public_ip
 }
