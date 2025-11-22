@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Users, UserPlus, UserMinus, Terminal, Activity, CheckCircle, AlertCircle } from 'lucide-react';
 
 // NOTE: In a real K8s deployment, this URL comes from an environment variable pointing to the Backend Service
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = "/api";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');

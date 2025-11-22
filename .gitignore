@@ -32,6 +32,7 @@ dist-ssr
 .terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
+*.tfstate.*
 *.tfvars
 *.tfvars.json
 crash.log

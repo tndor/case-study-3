@@ -41,21 +41,12 @@ terraform apply \
   -var="image_tag=$GIT_SHA" \
   -auto-approve
 
-# --- 4. FRONTEND PHASE ---
-echo ""
-echo "🔗 Fetching Backend LoadBalancer URL..."
-# We need this URL to bake it into the React App
-BACKEND_URL=$(terraform output -raw backend_url)
-echo "   Backend is live at: http://$BACKEND_URL"
-
-# Go back to root to access frontend folder
-cd ../.. 
-
 echo ""
 echo "📦 [3/4] Building & Pushing Frontend Image..."
-cd app/frontend
+
+cd ../../app/frontend
 # Build Arg is CRITICAL here: passing the backend URL to Vite
-docker build --build-arg VITE_API_URL="http://$BACKEND_URL" -t innovatech-frontend:$GIT_SHA .
+docker build -t innovatech-frontend:$GIT_SHA .
 docker tag innovatech-frontend:$GIT_SHA $ECR_URL/innovatech-frontend:$GIT_SHA
 docker push $ECR_URL/innovatech-frontend:$GIT_SHA
 cd ../..
@@ -72,5 +63,4 @@ echo ""
 echo "==============================================="
 echo "✅ DEPLOYMENT COMPLETE!"
 echo "   Frontend Access: http://$FRONTEND_URL"
-echo "   Backend Access:  http://$BACKEND_URL"
 echo "==============================================="

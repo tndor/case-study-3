@@ -94,9 +94,9 @@ resource "kubernetes_service" "backend_svc" {
     selector = {
       app = "hr-backend"
     }
-    type = "LoadBalancer"
+    type = "ClusterIP"
     port {
-      port        = 80
+      port        = 5000
       target_port = 5000
     }
   }
