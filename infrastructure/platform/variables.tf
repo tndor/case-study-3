@@ -24,6 +24,11 @@ variable "ad_domain" {
   type        = string
 }
 
+variable "ad_netbios" {
+  description = "The Active Directory NetBIOS name."
+  type        = string
+}
+
 variable "ad_user" {
   description = "The Active Directory service account username."
   type        = string

@@ -44,6 +44,13 @@ resource "aws_instance" "domain_controller" {
   vpc_security_group_ids      = [aws_security_group.ad.id]
   associate_public_ip_address = true
 
+  user_data = templatefile("${path.module}/templates/setup_ad.ps1.tftpl", {
+    ad_domain   = var.ad_domain
+    ad_netbios  = var.ad_netbios
+    ad_password = var.ad_password
+    ad_user = var.ad_user
+  })
+
   tags = {
     Name = "Innovatech-DC"
   }
