@@ -38,6 +38,12 @@ resource "kubernetes_deployment" "backend" {
         labels = {
           app = "hr-backend"
         }
+
+        annotations = {
+          "prometheus.io/scrape" = "true"
+          "prometheus.io/port"   = "5000"
+          "prometheus.io/path"   = "/metrics"
+        }
       }
       spec {
         container {

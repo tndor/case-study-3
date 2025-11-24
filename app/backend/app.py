@@ -6,10 +6,11 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from botocore.exceptions import ClientError, NoCredentialsError
-# FIX: Removed MODIFY_PASSWORD (it's a method, not an import)
+from prometheus_flask_exporter import PrometheusMetrics
 from ldap3 import Server, Connection, ALL, NTLM, SIMPLE, MODIFY_REPLACE
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 CORS(app)
 load_dotenv()
 
