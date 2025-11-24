@@ -176,20 +176,38 @@ def offboard():
     first = "Unknown" 
     last = "Unknown"
     
+    # 1. Fetch user details first (to get name for AD delete)
     if not IS_MOCK_AWS:
         try:
             resp = table.get_item(Key={'username': username})
             if 'Item' in resp:
                 first = resp['Item']['firstName']
                 last = resp['Item']['lastName']
-                table.delete_item(Key={'username': username})
-                logs.append(f"DB: Deleted record {username}")
-        except: pass
+        except Exception as e:
+            logs.append(f"DB Error fetching user: {str(e)}")
 
+    # 2. Decommission External Resources (AD & S3)
+    # We still delete the access, even if we keep the DB record
     if first != "Unknown":
         logs.append(workflow_delete_ad_user(username, first, last))
+        # Note: We didn't implement S3 delete in the latest iteration, 
+        # but if you have it, it goes here.
     else:
         logs.append("AD: Skipped delete (Could not find name in DB)")
+
+    # 3. SOFT DELETE: Mark as Inactive in DB instead of deleting
+    if not IS_MOCK_AWS:
+        try:
+            table.update_item(
+                Key={'username': username},
+                UpdateExpression="set #s = :val",
+                # 'status' is a reserved word in DynamoDB, so we alias it to #s
+                ExpressionAttributeNames={'#s': 'status'},
+                ExpressionAttributeValues={':val': 'Inactive'}
+            )
+            logs.append(f"DB: Marked record {username} as Inactive")
+        except Exception as e:
+            logs.append(f"DB Error updating status: {str(e)}")
 
     return jsonify({"message": "Offboarding Complete", "logs": logs})
 
