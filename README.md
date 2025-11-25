@@ -53,13 +53,4 @@ This project uses an automated deployment script to handle Docker builds, ECR pu
 
 ## 💰 Cost Management
 
-To minimize AWS costs during development, use the provided scripts to pause expensive compute resources.
-
-* **Sleep Mode (Overnight):** Scales EKS nodes to 0 and stops the Windows server.
-    ```bash
-    ./sleep.sh
-    ```
-* **Wake Mode (Resume Work):** Starts the Windows server, scales EKS nodes back up, and rebuilds the frontend with a new LB URL.
-    ```bash
-    ./wake.sh
-    ```
+To minimize AWS costs during development, you can destroy the application layer and stop the Windows AD.
